@@ -8,6 +8,10 @@ SVG files, especially exported from various editors, usually contain a lot of re
 
 This repo creates `svgop` from `svgo`. While `svgo` requires a Nodejs environment to run, `svgop` is a standalone binary executable tool for **macOS** (64-bit) and **Windows** (x86 and x64). `svgop` accepts SVG in stdin and outputs the optimized version to stdout. The binary executables of `svgop` are created using [`pkg`](https://www.npmjs.com/package/pkg). 
 
+## Download
+
+[**DOWNLOAD**](https://github.com/twardoch/svgop/releases/latest) the latest release for macOS or Windows
+
 ## Usage 
 
 - from `.svg` to `.svg`
