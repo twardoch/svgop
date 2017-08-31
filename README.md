@@ -6,7 +6,13 @@
 
 SVG files, especially exported from various editors, usually contain a lot of redundant and useless information such as editor metadata, comments, hidden elements, default or non-optimal values and other stuff that can be safely removed or converted without affecting SVG rendering result.
 
-This repo creates `svgop` from `svgo`. While `svgo` requires a Nodejs environment to run, `svgop` is a standalone binary executable tool for **macOS** (64-bit) and **Windows** (x86 and x64). `svgop` accepts SVG in stdin and outputs the optimized version to stdout. The binary executables of `svgop` are created using [`pkg`](https://www.npmjs.com/package/pkg). 
+## What is `svgop`? 
+
+While `svgo` requires a Nodejs environment to run, `svgop` is a standalone binary executable tool for **macOS** (64-bit) and **Windows** (x86 and x64). `svgop` accepts SVG in stdin and outputs the optimized version to stdout. It uses the default `svgo` [config](https://github.com/twardoch/svgop/blob/master/src/svgop.js). 
+
+This repo contains a process to create `svgop` from `svgo` using the Nodejs [`pkg`](https://www.npmjs.com/package/pkg) compiler. 
+
+Note: To make `pkg` work, a customized version of [`config.js`](https://github.com/twardoch/svgop/blob/master/src/lib/svgo/config.js) will replace `svgo`’s own [`config.js`](https://github.com/svg/svgo/blob/master/lib/svgo/config.js). The customized version will need to be updated manually from time to time. 
 
 ## Download
 
