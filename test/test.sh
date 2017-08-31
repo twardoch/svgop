@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
+dir=${0%/*}; if [ "$dir" = "$0" ]; then dir="."; fi; cd "$dir"; 
 echo "ORIGINAL:"
-cat ./test/test.svg
+cat test.svg
 echo "OPTIMIZED:"
-cat ./test/test.svg | ./bin/macos/svgop
+../bin/macos/svgop < test.svg
