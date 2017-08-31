@@ -5,10 +5,10 @@ lcov.info
 bin/svgo-profiling
 *.sublime-*
 *.log
-.DS_Store
-svgo/
-package-lock.json
-plugins/
-/lib/
 .idea/
-dist/
+.DS_Store
+package-lock.json
+/svgo/
+/lib/
+plugins/
+/dist/
