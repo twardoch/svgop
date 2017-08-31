@@ -11,3 +11,4 @@ package-lock.json
 plugins/
 lib/
 .idea/
+dist/

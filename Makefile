@@ -29,29 +29,42 @@ prep-ship:
 
 build-macos: prep
 	@echo "Building 'svgop' for macOS ./bin/macos"
-	@mkdir -p ./bin/macos
-	@pkg -t macos-x64 --output=./bin/macos/svgop -c pkg.json ./src/svgop.js
+	@mkdir -p ./bin/svgop-macos
+	@pkg -t macos-x64 --output=./bin/svgop-macos/svgop -c pkg.json ./src/svgop.js
 
 build-win32: prep
 	@echo "Building 'svgop' for Windows x86 in ./bin/win32"
-	@mkdir -p ./bin/win32
-	@pkg -t win-x86 --output=./bin/win32/svgop.exe -c pkg.json ./src/svgop.js
+	@mkdir -p ./bin/svgop-win32
+	@pkg -t win-x86 --output=./bin/svgop-win32/svgop.exe -c pkg.json ./src/svgop.js
 
 build-win64: prep
 	@echo "Building 'svgop' for Windows x64 in ./bin/win64"
-	@mkdir -p ./bin/win64
-	@pkg -t win-x64 --output=./bin/win64/svgop.exe -c pkg.json ./src/svgop.js
+	@mkdir -p ./bin/svgop-win64
+	@pkg -t win-x64 --output=./bin/svgop-win64/svgop.exe -c pkg.json ./src/svgop.js
 
 install: build-macos
-	@cp ./bin/macos/svgop /usr/local/bin
+	@echo "Installing /usr/loca/bin/svgop"
+	@cp ./bin/svgop-macos/svgop /usr/local/bin
+
+package: package-macos package-win32 package-win64
+
+package-macos: 
+	@mkdir -p dist
+	@cd ./bin; zip -r ../dist/svgop-macos.zip svgop-macos/; cd ..
+
+package-win32: 
+	@mkdir -p dist
+	@cd ./bin; zip -r ../dist/svgop-win32.zip svgop-win32/; cd ..
+
+package-win64: 
+	@mkdir -p dist
+	@cd ./bin; zip -r ../dist/svgop-win64.zip svgop-win64/; cd ..
 
 clean: 
+	@echo "Cleaning"
 	@rm -rf ./package-lock.json
 	@rm -rf ./node_modules/
 	@rm -rf ./svgo/
 	@rm -rf ./lib/
 	@rm -rf ./plugins/
-	@rm -rf ./bin/macos/
-	@rm -rf ./bin/win32/
-	@rm -rf ./bin/win64/
 	@rm -rf ./bin/
