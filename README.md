@@ -8,7 +8,7 @@ SVG files, especially exported from various editors, usually contain a lot of re
 
 ## What is `svgop`? 
 
-While `svgo` requires a Nodejs environment to run, `svgop` is a standalone binary executable tool for **macOS** (64-bit) and **Windows** (x86 and x64). `svgop` accepts SVG in stdin and outputs the optimized version to stdout. It uses the default `svgo` config. 
+While `svgo` requires a Nodejs environment to run, `svgop` is a standalone binary executable tool for **macOS** (64-bit) and **Windows** (x86 and x64). `svgop` accepts SVG in stdin and outputs the optimized version to stdout. It uses the default `svgo` [config](https://github.com/twardoch/svgop/blob/master/src/svgop.js). 
 
 This repo contains a process to create `svgop` from `svgo` using the Nodejs [`pkg`](https://www.npmjs.com/package/pkg) compiler. 
 
