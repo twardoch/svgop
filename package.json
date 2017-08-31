@@ -1,0 +1,48 @@
+{
+  "name": "svgop",
+  "version": "0.7.2",
+  "description": "Binary executable versions of svgo, the Nodejs-based tool for optimizing SVG vector graphics files",
+  "keywords": [
+    "svgo",
+    "svg",
+    "optimize",
+    "minify"
+  ],
+  "homepage": "https://github.com/twardoch/svgop",
+  "bugs": {
+    "url": "https://github.com/twardoch/svgop/issues",
+    "email": "adam+github@twardoch.com"
+  },
+  "author": {
+    "name": "Adam Twardoch",
+    "email": "adam+github@twardoch.com",
+    "url": "https://github.com/github"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/twardoch/svgop.git"
+  },
+  "main": "./lib/svgo.js",
+  "bin": {
+    "svgop": "./bin/js/svgop.js"
+  },
+  "directories": {
+    "bin": "./bin",
+    "lib": "./lib"
+  },
+  "scripts": {
+    "pkg": "pkg ./svgop.js"
+  },
+  "dependencies": {
+    "svgo": "^0.7.2"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "license": "MIT",
+  "pkg": {
+    "scripts": [
+      "./lib/**/*.js"
+    ]
+  }
+}
