@@ -9,6 +9,6 @@ bin/svgo-profiling
 svgo/
 package-lock.json
 plugins/
-lib/
+/lib/
 .idea/
 dist/
