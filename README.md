@@ -40,5 +40,5 @@ Clone the repo on macOS, run `make`. The executables will be found in `./bin`.
 
 This software is released under the terms of the [MIT license](https://github.com/twardoch/svgop/blob/master/LICENSE).
 
-`svgop`: Copyright © 2017 Adam Twardoch
-`svgo`: Copyright © 2012–2016 Kir Belevich and Contributors
+- `svgop`: Copyright © 2017 Adam Twardoch
+- `svgo`: Copyright © 2012–2016 Kir Belevich and Contributors
