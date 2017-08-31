@@ -4,6 +4,7 @@
 
 var SVGO = require('../lib/svgo');
 var svgo = new SVGO({
+            floatPrecision: 2, 
             plugins:
                 ['removeDoctype',
                     'removeXMLProcInst',
@@ -59,7 +60,7 @@ stdin.on('data', function(chunk) {
 stdin.on('end', function() {
     svgo.optimize(data).then(function(result) {
         console.log(result.data);
-        //console.dir(svgo.config);
+        //console.log(JSON.stringify(svgo.config, null, 2));
     });
 });
 

@@ -1,6 +1,6 @@
 {
   "name": "svgop",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "Binary executable versions of svgo, the Nodejs-based tool for optimizing SVG vector graphics files",
   "keywords": [
     "svgo",
@@ -24,14 +24,11 @@
   },
   "main": "./lib/svgo.js",
   "bin": {
-    "svgop": "./bin/js/svgop.js"
+    "svgop": "./src/svgop.js"
   },
   "directories": {
-    "bin": "./bin",
+    "src": "./src",
     "lib": "./lib"
-  },
-  "scripts": {
-    "pkg": "pkg ./svgop.js"
   },
   "dependencies": {
     "svgo": "^0.7.2"
@@ -39,10 +36,5 @@
   "engines": {
     "node": ">=4.0.0"
   },
-  "license": "MIT",
-  "pkg": {
-    "scripts": [
-      "./lib/**/*.js"
-    ]
-  }
+  "license": "MIT"
 }
