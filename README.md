@@ -10,7 +10,7 @@ This repo creates `svgop` from `svgo`. While `svgo` requires a Nodejs environmen
 
 ## Download
 
-[**DOWNLOAD**](https://github.com/twardoch/svgop/releases/latest) the latest release for macOS or Windows
+[**DOWNLOAD**](https://github.com/twardoch/svgop/releases/latest) the latest release for macOS (`svgop-macos.zip`), Windows 32-bit (`svgop-win32.zip`) or Windows 64-bit (`svgop-win64.zip`). 
 
 ## Usage 
 
