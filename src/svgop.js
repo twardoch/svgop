@@ -6,7 +6,7 @@ console.log = function() {
   this._stderr.write('');
 };
 console.error = function() {
-  this._stdout.write(util.format.apply(null, arguments) + '\n');
+  this._stdout.write(util.format.apply(null, arguments));
 };
 
 
@@ -88,8 +88,9 @@ getStdin.buffer().then(data => {
                         svgGfx.embedFonts = true;
                         return page.getOperatorList().then(function (opList) {
                             return svgGfx.getSVG(opList, viewport).then(function (svg) {
-                                svgo.optimize(svg.toString().replace(/svg:/g, '')).then(function(result) {
-                                    console.error(result.data);
+                                var svgstr = svg.toString().replace(/svg:/g, '');
+                                svgo.optimize(svgstr).then(function(result) {
+                                    console.error(result.data.replace('<svg width','<svg xmlns="http://www.w3.org/2000/svg" width'));
                                 });
                             }); 
                         }); 

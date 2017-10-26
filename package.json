@@ -1,6 +1,6 @@
 {
   "name": "svgop",
-  "version": "0.7.4",
+  "version": "0.7.5",
   "description": "Binary executable versions of svgo, the Nodejs-based tool for optimizing SVG vector graphics files",
   "keywords": [
     "svgo",
