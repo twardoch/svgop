@@ -7,13 +7,17 @@ prep-git:
 	@npm install -g pkg
 	@echo "Installing 'svgo' and its dependencies"
 	@npm install
-	@echo "Gathering 'svgo' sources"
-	@git clone https://github.com/svg/svgo
+	#@echo "Gathering 'svgo' sources"
+	#@git clone https://github.com/svg/svgo
+	@mv ./node_modules/svgo .
 	@cp -r ./svgo/lib .
 	@cp -r ./svgo/plugins .
-	@rm -rf ./node_modules/svgo
+	#@rm -rf ./node_modules/svgo
 	@echo "Patching 'svgo' sources"
 	@cp ./src/lib/svgo/config.js ./lib/svgo/
+	@echo "Assing pdf.js"
+	#@cp ./node_modules/pdfjs-dist/build/pdf.combined.js ./lib/
+	#@rm -rf ./node_modules/pdfjs-dist
 
 prep-ship: 
 	@echo "Installing 'pkg' for node"
