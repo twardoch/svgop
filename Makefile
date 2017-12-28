@@ -1,4 +1,4 @@
-all: build-macos build-win32 build-win64
+all: build-macos build-win32 build-win64 build-linux
 
 prep: clean prep-git
 
@@ -36,6 +36,11 @@ build-macos: prep
 	@mkdir -p ./bin/svgop-macos
 	@pkg -t macos-x64 --output=./bin/svgop-macos/svgop -c pkg.json ./src/svgop.js
 
+build-linux: prep
+	@echo "Building 'svgop' for Linux ./bin/linux"
+	@mkdir -p ./bin/svgop-linux
+	@pkg -t linux-x64 --output=./bin/svgop-linux/svgop -c pkg.json ./src/svgop.js
+
 build-win32: prep
 	@echo "Building 'svgop' for Windows x86 in ./bin/win32"
 	@mkdir -p ./bin/svgop-win32
@@ -50,11 +55,15 @@ install: build-macos
 	@echo "Installing /usr/loca/bin/svgop"
 	@cp ./bin/svgop-macos/svgop /usr/local/bin
 
-package: package-macos package-win32 package-win64
+package: package-macos package-win32 package-win64 package-linux
 
 package-macos: 
 	@mkdir -p dist
 	@cd ./bin; zip -r ../dist/svgop-macos.zip svgop-macos/; cd ..
+
+package-linux: 
+	@mkdir -p dist
+	@cd ./bin; zip -r ../dist/svgop-linux.zip svgop-linux/; cd ..
 
 package-win32: 
 	@mkdir -p dist
