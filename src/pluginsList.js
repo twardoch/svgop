@@ -12,7 +12,7 @@
                     'collapseGroups',
                     'convertColors',
                     'convertPathData',
-                    'convertShapeToPath',
+                    //'convertShapeToPath',
                     'convertStyleToAttrs',
                     'convertTransform',
                     'inlineStyles',

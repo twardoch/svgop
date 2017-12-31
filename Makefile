@@ -15,6 +15,7 @@ prep-git:
 	#@rm -rf ./node_modules/svgo
 	@echo "Patching 'svgo' sources"
 	@cp ./src/lib/svgo/config.js ./lib/svgo/
+	@cp ./src/plugins/convertPathData.js ./plugins/
 	@echo "Assing pdf.js"
 	#@cp ./node_modules/pdfjs-dist/build/pdf.combined.js ./lib/
 	#@rm -rf ./node_modules/pdfjs-dist
@@ -30,6 +31,7 @@ prep-ship:
 	@rm -rf ./node_modules/svgo
 	@echo "Patching 'svgo' sources"
 	@cp ./src/lib/svgo/config.js ./lib/svgo/
+	@cp ./src/lib/svgo/plugin/convertPathData.js ./plugins/
 
 build-macos: prep
 	@echo "Building 'svgop' for macOS ./bin/macos"
