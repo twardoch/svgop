@@ -12,7 +12,7 @@ var pluginMap = {
     collapseGroups: require('../../plugins/collapseGroups.js'),
     convertColors: require('../../plugins/convertColors.js'),
     convertPathData: require('../../plugins/convertPathData.js'),
-    convertShapeToPath: require('../../plugins/convertShapeToPath.js'),
+    //convertShapeToPath: require('../../plugins/convertShapeToPath.js'),
     convertStyleToAttrs: require('../../plugins/convertStyleToAttrs.js'),
     convertTransform: require('../../plugins/convertTransform.js'),
     inlineStyles: require('../../plugins/inlineStyles.js'),

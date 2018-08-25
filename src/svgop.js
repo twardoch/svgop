@@ -23,7 +23,7 @@ pdfjsLib.verbosity = pdfjsLib.PDFJS.VERBOSITY_LEVELS.errors;
 //console.log(pdfjsLib.PDFJS);
 
 var svgo = new SVGO({
-            floatPrecision: 3, 
+            floatPrecision: 8, 
             plugins: [
                     'addAttributesToSVGElement',
                     'addClassesToSVGElement',
