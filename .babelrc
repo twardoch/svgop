@@ -1,0 +1,13 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          //"esmodules": true,
+          "chrome": "75"
+        }
+      }
+    ]
+  ]
+}
