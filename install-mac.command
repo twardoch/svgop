@@ -150,9 +150,10 @@ function install {
     needbrew node;
     needbrew qjs quickjs;
     neednode pkg;
-    neednode zzzzwebpack webpack@next;
+    neednode webpack;
 }
 
 install;
 cd src;
+npm i;
 make all;

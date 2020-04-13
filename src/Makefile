@@ -36,6 +36,7 @@ build-qjs: prebuild
 	# @prettier ../build/svgop-qjs/svgop-pack.js > ../build/svgop-qjs/svgop-mod.js
 	@echo 'import * as std from "std";' > ../build/svgop-qjs/svgop.js
 	@cat ../build/svgop-qjs/svgop-mod.js >> ../build/svgop-qjs/svgop.js
+	@qjsc -e -o ../build/svgop-qjs/svgop.c ../build/svgop-qjs/svgop.js
 
 build-macos: build-qjs-macos build-pkg-macos
 

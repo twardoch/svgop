@@ -6,14 +6,11 @@ const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
 
 module.exports = {
     target: "web",
-    mode: "none",
+    mode: "production",
     entry: ["./app/svgop-qjs.js"],
     output: {
         path: path.resolve(__dirname, "..", "build", "svgop-qjs"),
         filename: "svgop-mod.js",
-    },
-    optimization: {
-        minimize: false,
     },
     externals: {
         std: "std",

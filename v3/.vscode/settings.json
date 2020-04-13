@@ -1,6 +1,0 @@
-{
-    "files.associations": {
-        "*.command": "shellscript",
-        "quickjs-libc.h": "c"
-    }
-}
