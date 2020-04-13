@@ -32,7 +32,7 @@ This repo contains a process to create `svgop` from `svgo` in two ways:
 [**DOWNLOAD**](https://github.com/twardoch/svgop/releases/latest) the latest release
 
 -   for macOS (`svgop-qjs-macos.zip`), made with `qjsc`, small
--   for Windows 64-bit (`svgop-win64.zip`), made with `pkg`, large
+-   for Windows 64-bit (`svgop-pkg-win64.zip`), made with `pkg`, large
 
 ## Usage
 
