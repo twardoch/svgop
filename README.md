@@ -75,6 +75,8 @@ svgop < test.svg | gzip -cfq9 > test.min.svgz
 
 I’m not building on Windows or Linux. You can build, but you’ll need to adapt my Makefile, which is macOS-centric.
 
+### Building shortcut 😉
+
 [build/svgop-qjs](https://github.com/twardoch/svgop/tree/master/build/svgop-qjs) contains the webpacked svgo that you can run with qjs and the generated .c that you can compile against the QuickJS headers to get the binary.
 
 ### Note
