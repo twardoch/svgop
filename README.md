@@ -45,10 +45,16 @@ Use piping (redirection) to read from files (`<`) and to write to files (`>`).
 svgop < test.svg > test.min.svg
 ```
 
-On Windows this should work:
+In Windows command prompt:
 
-```bash
+```
 svgop.exe < test.svg > test.min.svg
+```
+
+In Windows PowerShell, the equivalent should be:
+
+```
+Get-Content test.svg | ./svgop.exe > test.min.txt
 ```
 
 -   from `.svgz` to `.svg`:
