@@ -39,7 +39,9 @@ This repo contains a process to create `svgop` from `svgo` in two ways:
 `svgop` uses stdin for input, stdout for output, and has no commandline options. It runs a predefined set of `svgo` plugins.
 Use piping (redirection) to read from files (`<`) and to write to files (`>`).
 
--   from `.svg` to `.svg`
+#### From `.svg` to `.svg`
+
+In macOS or Linux:
 
 ```bash
 svgop < test.svg > test.min.svg
@@ -57,13 +59,17 @@ In Windows PowerShell, the equivalent should be:
 Get-Content test.svg | ./svgop.exe > test.min.txt
 ```
 
--   from `.svgz` to `.svg`:
+#### From `.svgz` to `.svg`:
+
+In macOS or Linux:
 
 ```bash
 gunzip -c test.svgz | svgop > test.min.svg
 ```
 
--   from `.svg` to `.svgz`:
+#### From `.svg` to `.svgz`:
+
+In macOS or Linux:
 
 ```bash
 svgop < test.svg | gzip -cfq9 > test.min.svgz
