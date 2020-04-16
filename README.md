@@ -36,10 +36,18 @@ This repo contains a process to create `svgop` from `svgo` in two ways:
 
 ## Usage
 
+svgop uses stdin for input, stdout for output, and has no commandline options. Use piping (redirrction) to read from files (`<`) and to write to files (`>`).
+
 -   from `.svg` to `.svg`
 
 ```bash
 svgop < test.svg > test.min.svg
+```
+
+On Windows this should work:
+
+```bash
+svgop.exe < test.svg > test.min.svg
 ```
 
 -   from `.svgz` to `.svg`:
