@@ -41,13 +41,13 @@ Use piping (redirection) to read from files (`<`) and to write to files (`>`).
 
 #### From `.svg` to `.svg`
 
-In macOS or Linux:
+In **macOS** or Linux:
 
 ```bash
 svgop < test.svg > test.min.svg
 ```
 
-In Windows command prompt:
+In **Windows** command prompt:
 
 ```
 svgop.exe < test.svg > test.min.svg
