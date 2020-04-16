@@ -37,7 +37,7 @@ This repo contains a process to create `svgop` from `svgo` in two ways:
 ## Usage
 
 `svgop` uses stdin for input, stdout for output, and has no commandline options. It runs a predefined set of `svgo` plugins.
-Use piping (redirrction) to read from files (`<`) and to write to files (`>`).
+Use piping (redirection) to read from files (`<`) and to write to files (`>`).
 
 -   from `.svg` to `.svg`
 
