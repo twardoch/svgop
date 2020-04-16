@@ -56,7 +56,7 @@ svgop.exe < test.svg > test.min.svg
 In Windows PowerShell, the equivalent should be:
 
 ```
-Get-Content test.svg | ./svgop.exe > test.min.txt
+Get-Content test.svg | ./svgop.exe > test.min.svg
 ```
 
 #### From `.svgz` to `.svg`:
