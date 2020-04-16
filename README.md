@@ -107,13 +107,16 @@ To make `pkg` work, a customized version of [`config.js`](https://github.com/twa
 
 ### Other apps of interest
 
-#### SVG minification
+#### SVG minification/optimization
 
 - svgo https://github.com/svg/svgo
 - libsvgo https://github.com/dr-js/libsvgo
 - usvg https://github.com/RazrFalcon/resvg/blob/master/README.md
 - nanosvg https://github.com/rsheeter/nanosvg
 - https://maker.js.org/docs/advanced-drawing/#Simplifying%20paths
+- https://github.com/scour-project/scour
+- https://pypi.org/project/SVGCompress/
+- https://github.com/manisandro/svg2svgt
 
 ### PDF to SVG
 
