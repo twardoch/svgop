@@ -112,7 +112,7 @@ To make `pkg` work, a customized version of [`config.js`](https://github.com/twa
 - svgo https://github.com/svg/svgo
 - libsvgo https://github.com/dr-js/libsvgo
 - usvg https://github.com/RazrFalcon/resvg/blob/master/README.md
-- nanosvg https://github.com/rsheeter/color-fonts
+- nanosvg https://github.com/rsheeter/nanosvg
 
 ### PDF to SVG
 
