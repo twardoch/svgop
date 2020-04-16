@@ -105,6 +105,21 @@ webpacked svgo that you can run with qjs and the generated .c that you can compi
 
 To make `pkg` work, a customized version of [`config.js`](https://github.com/twardoch/svgop/blob/master/src/lib/svgo/config.js) will replace `svgo`’s own [`config.js`](https://github.com/svg/svgo/blob/master/lib/svgo/config.js). The customized version will need to be updated manually from time to time.
 
+### Other apps of interest
+
+#### SVG minification
+
+- usvg https://github.com/RazrFalcon/resvg/blob/master/README.md
+- nanosvg https://github.com/rsheeter/color-fonts
+
+### PDF to SVG
+
+- pdftocairo https://poppler.freedesktop.org/
+
+### SVG to PDF
+
+- https://cairosvg.org/
+
 ## License and Copyright
 
 Portions of this software are licensed under the terms of the Apache 2 license. Portions of this software are licensed under the terms of the MIT license. Please consult [LICENSE](https://github.com/twardoch/svgop/blob/master/LICENSE).
