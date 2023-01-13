@@ -1,0 +1,7 @@
+node_modules
+svgo
+/var/log/
+.git
+../.git
+package-lock.json
+../package-lock.json

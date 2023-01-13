@@ -51,6 +51,7 @@ build-pkg-macos: prebuild
 	@mkdir -p ../build/svgop-pkg-macos
 	@pkg -t macos-x64 --output=../build/svgop-pkg-macos/svgop -c ./package.json ./app/svgop-pkg.js
 	@cp ../build/svgop-pkg-macos/svgop ../bin/svgop-pkg-macos/
+	@upx -9 ../bin/svgop-pkg-macos/svgop
 
 build-linux: build-pkg-linux
 
@@ -59,6 +60,7 @@ build-pkg-linux: prebuild
 	@mkdir -p ../build/svgop-pkg-linux
 	@pkg -t linux-x64 --output=../build/svgop-pkg-linux/svgop -c ./package.json ./app/svgop-pkg.js
 	@cp ../build/svgop-pkg-linux/svgop ../bin/svgop-pkg-linux/
+	@upx -9 ../bin/svgop-pkg-linux/svgop
 
 build-win: build-pkg-win64 build-pkg-win32
 
@@ -67,12 +69,14 @@ build-pkg-win32: prebuild
 	@mkdir -p ../build/svgop-pkg-win32
 	@pkg -t win-x86 --output=../build/svgop-pkg-win32/svgop.exe -c ./package.json ./app/svgop-pkg.js
 	@cp ../build/svgop-pkg-win32/svgop.exe ../bin/svgop-pkg-win32/
+	@#Fails on Jessie upx -9 ../bin/svgop-pkg-win32/svgop.exe 
 
 build-pkg-win64: prebuild
 	@echo "Building 'svgop' with pkg for Windows x64 in ./bin/svgop-pkg-win64"
 	@mkdir -p ../build/svgop-pkg-win64
 	@pkg -t win-x64 --output=../build/svgop-pkg-win64/svgop.exe -c ./package.json ./app/svgop-pkg.js
 	@cp ../build/svgop-pkg-win64/svgop.exe ../bin/svgop-pkg-win64/
+	@#Result fails (on Jessie) upx -9 ../bin/svgop-pkg-win64/svgop.exe
 
 install: build-macos
 	@echo "Installing /usr/local/bin/svgop"
