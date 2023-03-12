@@ -1,0 +1,35 @@
+---
+version: '3.5'
+
+services:
+  # Base image
+  debian-base:
+    build:
+      context: .
+      args:
+        - --rm
+      dockerfile: ./Dockerfile
+    working_dir: /root/workdir
+    environment:
+      DISPLAY: host.docker.internal:0.0
+      NO_AT_BRIDGE: 1
+    volumes:
+      - ..:/root/workdir
+    # command: /bin/bash
+
+  build:
+    extends: debian-base
+    working_dir: /root/workdir/src
+    command: -c "rm -rf package-lock.json ../package-lock.json .bin node_modules ../node_modules ; make -k clean all"
+
+  build-win:
+    extends: build
+    working_dir: /root/workdir/src
+    command: -c "rm -rf package-lock.json ../package-lock.json .bin node_modules ../node_modules ; make clean win"
+
+  # Run inside in interactive mode
+  #
+  #  `docker compose run --rm bash` on the CLI
+  bash:
+    extends: debian-base
+    # command: /bin/bash
