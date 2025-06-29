@@ -1,134 +1,188 @@
-# svgop
+# SVGOp: Standalone SVG Optimizer
 
-`svgop` (**SVG O**ptimizer **P**ipeable) is a standalone binary executable that combines the excellent [`svgo`](https://github.com/svg/svgo) Nodejs-based tool for optimizing SVG vector graphics files.
+SVGOp provides standalone, pre-compiled binary executables of **SVGO**, a powerful Node.js-based tool for optimizing SVG vector graphics files. This allows users to easily optimize SVGs without needing to install Node.js or manage npm packages directly.
 
-## Changelog
+## What is SVGOp?
 
-#### 2020-04-13: Version 0.8.0
+SVGOp is a command-line utility that takes an SVG file as input and outputs an optimized version of it. It uses a comprehensive set of SVGO's optimization plugins, configured for a good balance of file size reduction and visual fidelity (using a float precision of 8).
 
-QuickJS works! The macOS binary is now **97% smaller**! (`svgop-qjs-macos` has **2 MB**, `svgop-pkg-macos` has 83 MB).
+This project essentially packages the SVGO library into easy-to-use executables for various platforms.
 
-It’s also possible to compile for Windows and Linux, should be equally small, but I don’t offer precompiled versions for these platforms yet.
+## Who is it for?
 
-Older versions also bundled [`pdf.js`](https://mozilla.github.io/pdf.js/) but this was not working well.
+*   **Designers and Developers:** Anyone working with SVG files who wants to reduce their size for web performance or cleaner code, without the overhead of a Node.js environment.
+*   **Build Systems & Workflows:** Integrates easily into automated build processes or scripts where SVG optimization is a required step.
+*   **Users on systems without Node.js:** Provides access to SVGO's capabilities where installing Node.js might be difficult or undesirable.
 
-## Rationale
+## Why is it useful?
 
-SVG files, especially exported from various editors, usually contain a lot of redundant and useless information such as editor metadata, comments, hidden elements, default or non-optimal values and other stuff that can be safely removed or converted without affecting SVG rendering result.
+*   **No Node.js Required:** The primary benefit is using SVGO's optimization power without installing Node.js or its ecosystem.
+*   **Portability:** Single executable files can be easily moved and run on compatible systems.
+*   **Simplicity:** Offers a straightforward command-line interface for quick optimizations.
+*   **Pre-configured:** Comes with a robust, general-purpose optimization configuration, so you don't need to tinker with SVGO plugin settings unless you have very specific needs (in which case, using SVGO directly might be better).
 
-## What is `svgop`?
+## Installation
 
-While `svgo` requires a Nodejs environment to run, `svgop` is a standalone binary executable tool for **macOS** (64-bit) and **Windows** (x64, potentially also x86). `svgop` accepts **SVG** in stdin and outputs an **optimized SVG** to stdout.
-
-It uses the default `svgo` [config](https://github.com/twardoch/svgop/blob/master/src/svgop.js).
-
-This repo contains a process to create `svgop` from `svgo` in two ways:
-
--   (new) using the [QuickJS](https://bellard.org/quickjs/) compiler by Fabrice Bellard and Charlie Gordon; I can build for macOS only, the executable is 2 MB. QuickJS is a JS interpreter and compiler optimized for size.
--   (old) using the [`pkg`](https://www.npmjs.com/package/pkg) compiler; prebuilt binaries are provided for macOS, Windows x64 and Linux, but they’re large (the macOS one is 83 MB). pkg includes the entire Node.js runtime in the executable.
-
-## Download
-
-[**DOWNLOAD**](https://github.com/twardoch/svgop/releases/latest) the latest release
-
--   for macOS (`svgop-qjs-macos.zip`), made with `qjsc`, small
--   for Windows 64-bit (`svgop-pkg-win64.zip`), made with `pkg`, large
+1.  **Download:** Go to the [Releases page](https://github.com/twardoch/svgop/releases) of the SVGOp GitHub repository.
+2.  **Choose the right binary:** Download the appropriate executable for your operating system (Linux, macOS, Windows). You'll find these in the `bin/` directory of the repository or in the release assets.
+    *   `svgop-pkg-linux/svgop` for Linux
+    *   `svgop-pkg-macos/svgop` for macOS
+    *   `svgop-pkg-win64/svgop.exe` for Windows (64-bit)
+    *   There are also versions for Node.js (`svgop-node`) and QuickJS (`svgop-qjs-macos/svgop`, `build/svgop-qjs/svgop.js`). The `pkg` versions are generally recommended for standalone use.
+3.  **Make it executable (Linux/macOS):**
+    ```bash
+    chmod +x /path/to/your/downloaded/svgop
+    ```
+4.  **Place it in your PATH (Optional):** For easier access, move the executable to a directory included in your system's PATH (e.g., `/usr/local/bin` on Linux/macOS).
 
 ## Usage
 
-`svgop` uses stdin for input, stdout for output, and has no commandline options. It runs a predefined set of `svgo` plugins.
-Use piping (redirection) to read from files (`<`) and to write to files (`>`).
+### Command-Line Interface (CLI)
 
-#### From `.svg` to `.svg`
+SVGOp reads SVG data from standard input (stdin) and writes the optimized SVG data to standard output (stdout) (Note: for `svgop-node` and `svgop-pkg` versions, it technically writes to stderr, but this is usually redirected to behave like stdout for piping).
 
-In **macOS** or Linux:
-
-```bash
-svgop < test.svg > test.min.svg
-```
-
-In **Windows** command prompt:
-
-```
-svgop.exe < test.svg > test.min.svg
-```
-
-In Windows PowerShell, the equivalent should be:
-
-```
-Get-Content test.svg | ./svgop.exe > test.min.svg
-```
-
-#### From `.svgz` to `.svg`:
-
-In macOS or Linux:
+**Optimize a file:**
 
 ```bash
-gunzip -c test.svgz | svgop > test.min.svg
+./path/to/svgop < input.svg > output.svg
 ```
 
-#### From `.svg` to `.svgz`:
-
-In macOS or Linux:
+Or, if `svgop` is in your PATH:
 
 ```bash
-svgop < test.svg | gzip -cfq9 > test.min.svgz
+svgop < input.svg > output.svg
 ```
 
-## Building
+**Example:**
 
-### Requirements
+```bash
+# On macOS, using the pkg version
+./bin/svgop-pkg-macos/svgop < my_icon.svg > my_icon_optimized.svg
+```
 
--   [`QuickJS`](https://bellard.org/quickjs/) ([mirror](https://github.com/horhof/quickjs))
--   [`node`](https://nodejs.org/)
--   [`pkg`](https://www.npmjs.com/package/pkg)
--   [`webpack`](https://www.npmjs.com/package/webpack)
--   gcc, make etc.
+### Programmatic Usage (as a JavaScript module)
 
-### macOS
+While SVGOp is primarily designed for CLI use as standalone executables, the underlying SVGO library can be used programmatically in a Node.js environment. If you need programmatic control, it's generally recommended to use the [official `svgo` npm package](https://www.npmjs.com/package/svgo) directly.
 
-1. Clone the repo on macOS.
-2. Double-click or run `install-mac.command` to install the necessary dev tools.
-3. Run `cd src && make all`
-4. The executables will be found in `./bin`
+However, the `svgop` project does bundle `svgo` and provides different entry points that could theoretically be required if you were building it from source within a compatible JavaScript environment:
 
-### Windows and other systems
+*   `src/app/svgop-mod.js`: Potentially for QuickJS modules.
+*   `src/app/svgop-node.js`: For Node.js environment (though `get-stdin` makes it CLI-focused).
 
-I’m not building on Windows or Linux. You can build, but you’ll need to adapt my Makefile, which is macOS-centric.
+**Example (Conceptual - using SVGO directly is preferred for module usage):**
 
-### Building shortcut 😉
+If you had the `svgop` source and its dependencies installed in a Node.js project, you might try:
 
-[build/svgop-qjs](https://github.com/twardoch/svgop/tree/master/build/svgop-qjs) contains the intermediate results of my hackery: 
-webpacked svgo that you can run with qjs and the generated .c that you can compile against the QuickJS headers to get the binary.
+```javascript
+// This is a conceptual example. For library use, install and use 'svgo' directly.
+// const SVGO = require('./path/to/svgop/src/svgo/lib/svgo'); // Path to bundled SVGO
 
-### Note
+// const svgoInstance = new SVGO({
+//     floatPrecision: 8,
+//     plugins: [ /* ... list of plugins used by svgop ... */ ]
+// });
 
-To make `pkg` work, a customized version of [`config.js`](https://github.com/twardoch/svgop/blob/master/src/lib/svgo/config.js) will replace `svgo`’s own [`config.js`](https://github.com/svg/svgo/blob/master/lib/svgo/config.js). The customized version will need to be updated manually from time to time.
+// const svgInput = '<svg>...</svg>';
+// svgoInstance.optimize(svgInput).then(result => {
+//     console.log(result.data);
+// });
+```
 
-### Other apps of interest
+**For robust programmatic usage, please refer to the [SVGO documentation](https://github.com/svg/svgo#api).**
 
-#### SVG minification/optimization
+---
 
-- svgo https://github.com/svg/svgo
-- libsvgo https://github.com/dr-js/libsvgo
-- usvg https://github.com/RazrFalcon/resvg/blob/master/README.md
-- nanosvg https://github.com/rsheeter/nanosvg
-- https://maker.js.org/docs/advanced-drawing/#Simplifying%20paths
-- https://github.com/scour-project/scour
-- https://pypi.org/project/SVGCompress/
-- https://github.com/manisandro/svg2svgt
+## Technical Details
 
-### PDF to SVG
+### How SVGOp Works
 
-- pdftocairo https://poppler.freedesktop.org/
+SVGOp leverages the **SVGO (SVG Optimizer)** library. Here's a breakdown of its architecture and process:
 
-### SVG to PDF
+1.  **Core Engine (SVGO):** The heart of SVGOp is a bundled version of the `svgo` library (specifically, a version around `1.3.2` as per `src/package.json`). SVGO itself works by:
+    *   **Parsing SVG:** Converting the input SVG string into a JavaScript object representation (AST-like structure). This is handled by `SVG2JS` (`src/svgo/lib/svgo/svg2js.js`).
+    *   **Applying Plugins:** Traversing the JS object tree and applying a series of enabled plugins. Each plugin performs a specific optimization task (e.g., removing empty containers, minifying styles, converting colors). The list of plugins used by `svgop` is hardcoded in the `src/app/svgop-*.js` files.
+    *   **Generating SVG:** Converting the modified JS object tree back into an optimized SVG string. This is handled by `JS2SVG` (`src/svgo/lib/svgo/js2svg.js`).
+    *   **Multipass:** SVGO supports multipass optimization, where the process is repeated until no further size reduction is achieved (up to a limit, typically 10 passes). SVGOp uses this feature.
 
-- https://cairosvg.org/
+2.  **SVGOp Wrappers (`src/app/`):**
+    *   The files in `src/app/` (`svgop-node.js`, `svgop-pkg.js`, `svgop-qjs.js`, etc.) serve as different entry points for various JavaScript environments and packaging methods.
+    *   They initialize `SVGO` with a fixed configuration:
+        *   `floatPrecision: 8`
+        *   A long, predefined list of SVGO plugins (see `src/app/svgop-node.js` for the full list). This list aims for comprehensive optimization.
+    *   They handle input/output:
+        *   `svgop-node.js` and `svgop-pkg.js`: Use `get-stdin` to read from stdin. Output is directed to `console.error` (which is typically `process.stdout` in CLI tools).
+        *   `svgop-qjs.js`: Uses custom functions (`getstdin`, `std.out.puts`) for the QuickJS runtime environment.
+        *   `svgop-mod.js`: Appears to be a module version, possibly for QuickJS.
+        *   `svgop-web.js`: An incomplete attempt for web/browser usage.
 
-## License and Copyright
+3.  **Packaging and Distribution (`pkg`, QuickJS compilation, etc.):**
+    *   The project uses tools like `pkg` (for Node.js based executables) and QuickJS compilation to create standalone binaries found in the `bin/` and `build/` directories.
+    *   `webpack` is used to bundle the JavaScript code before packaging (see `webpack.config-*.js` files).
+    *   A `Makefile` (`src/Makefile`) and Docker files (`src/Dockerfile`, `src/docker-compose.yml`, `src/build-with-docker.sh`) are present, indicating the build process for creating these executables.
 
-Portions of this software are licensed under the terms of the Apache 2 license. Portions of this software are licensed under the terms of the MIT license. Please consult [LICENSE](https://github.com/twardoch/svgop/blob/master/LICENSE).
+### Code Structure Highlights
 
--   `svgop`: Copyright © 2017 Adam Twardoch
--   `svgo`: Copyright © 2012–2017 Kir Belevich and Contributors
+*   **`bin/`**: Contains pre-compiled, ready-to-use executables for different platforms.
+*   **`build/`**: Contains intermediate build artifacts, including compiled executables.
+*   **`src/`**: Source code.
+    *   **`src/app/`**: JavaScript wrappers/entry points for different targets (Node, pkg, QuickJS).
+    *   **`src/svgo/`**: A bundled copy of the `svgo` library source code.
+    *   **`src/package.json`**: Defines project metadata, dependencies (`svgo`, `get-stdin`), and build scripts (using `webpack`).
+    *   **`src/Makefile`**: Makefile for orchestrating builds.
+    *   **`src/webpack.config-*.js`**: Webpack configurations for bundling for different targets.
+*   **`test/`**: Contains sample SVG files for testing.
+
+### Default SVGO Configuration in SVGOp
+
+SVGOp uses a fixed, comprehensive set of SVGO plugins. This configuration is hardcoded in the `src/app/svgop-*.js` files. Key settings include:
+
+*   `floatPrecision: 8` (number of decimal places for floating-point numbers)
+*   **Enabled Plugins (non-exhaustive list):**
+    *   `cleanupAttrs`, `cleanupIDs`, `cleanupNumericValues`
+    *   `collapseGroups`
+    *   `convertColors`, `convertPathData`, `convertShapeToPath`, `convertStyleToAttrs`, `convertTransform`
+    *   `inlineStyles`, `minifyStyles`
+    *   `mergePaths`
+    *   `removeComments`, `removeDesc`, `removeDoctype`, `removeEditorsNSData`, `removeEmptyAttrs`, `removeEmptyContainers`, `removeEmptyText`, `removeHiddenElems`, `removeMetadata`, `removeRasterImages`, `removeScriptElement`, `removeStyleElement`, `removeTitle`, `removeUnknownsAndDefaults`, `removeUnusedNS`, `removeUselessDefs`, `removeUselessStrokeAndFill`, `removeViewBox`, `removeXMLNS`, `removeXMLProcInst`
+    *   `sortAttrs`
+    *   And several others. For the complete list, refer to the source code (e.g., `src/app/svgop-node.js`).
+
+This default configuration is designed to be generally effective for most SVG optimization tasks. If you require fine-grained control over plugins (e.g., to preserve certain elements or attributes that SVGOp might remove), you should use SVGO directly as a Node.js library, where you can customize the plugin configuration.
+
+## Coding and Contribution Rules
+
+While there isn't a formal `CONTRIBUTING.md` file with explicit rules in this repository, contributions would generally follow standard open-source practices:
+
+1.  **Understand the Project:** Familiarize yourself with SVGOp's purpose (providing standalone SVGO executables) and its current architecture.
+2.  **Issue Tracker:** Check the [GitHub Issues](https://github.com/twardoch/svgop/issues) for existing bugs, feature requests, or discussions.
+    *   If you find a bug, provide detailed steps to reproduce it.
+    *   If you have a feature idea, consider discussing it first.
+3.  **Fork the Repository:** Create your own fork of `twardoch/svgop`.
+4.  **Create a Branch:** Make your changes in a new git branch, named descriptively (e.g., `fix-windows-path-issue`, `feature-add-new-build-target`).
+5.  **Code Style:**
+    *   The existing JavaScript code primarily uses `"use strict";` and CommonJS modules (`require`).
+    *   Follow the existing code style for consistency (indentation, variable naming, comments).
+    *   The project includes `.editorconfig`, `.jshintrc`, and `.babelrc` which might provide hints on coding standards.
+6.  **Dependencies:**
+    *   The core dependency is `svgo`. Updates to `svgo` should be tested carefully.
+    *   Other dependencies like `get-stdin` and `webpack` are for the build and CLI wrapper functionality.
+7.  **Build Process:**
+    *   Understand the build process involving `webpack`, `pkg`, and potentially QuickJS compilation (see `src/Makefile`, `src/build-with-docker.sh`).
+    *   If your changes affect the build, ensure they work across the different targets if possible.
+    *   The `bin/` and `build/` directories contain generated files. You might need to update these if your changes affect the executables, or understand how they are generated.
+8.  **Testing:**
+    *   Test your changes thoroughly. The `test/` directory contains sample SVG files.
+    *   Ideally, new functionality should come with corresponding tests or test cases.
+9.  **Commit Messages:** Write clear and concise commit messages.
+10. **Pull Request:** Submit a Pull Request (PR) to the `main` branch (or the relevant active development branch) of the original `twardoch/svgop` repository.
+    *   Clearly describe the changes you've made and why.
+    *   Link to any relevant issues.
+
+**Specific considerations for this project:**
+
+*   **Focus on Standalone Executables:** The primary goal is to provide easy-to-use binaries. Contributions should generally align with this.
+*   **SVGO Version:** Changes might involve updating the bundled SVGO version or modifying how it's integrated.
+*   **Build System Complexity:** The build system targets multiple platforms and JS environments. Changes here require careful testing.
+*   **Plugin Configuration:** The SVGO plugin configuration is currently fixed. Changes to this would be a significant alteration and should be discussed.
+
+By following these guidelines, you can help maintain the quality and consistency of the SVGOp project.
