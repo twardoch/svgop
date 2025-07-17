@@ -23,17 +23,54 @@ This project essentially packages the SVGO library into easy-to-use executables 
 
 ## Installation
 
+### Option 1: Download Pre-built Binaries (Recommended)
+
 1.  **Download:** Go to the [Releases page](https://github.com/twardoch/svgop/releases) of the SVGOp GitHub repository.
-2.  **Choose the right binary:** Download the appropriate executable for your operating system (Linux, macOS, Windows). You'll find these in the `bin/` directory of the repository or in the release assets.
-    *   `svgop-pkg-linux/svgop` for Linux
-    *   `svgop-pkg-macos/svgop` for macOS
-    *   `svgop-pkg-win64/svgop.exe` for Windows (64-bit)
-    *   There are also versions for Node.js (`svgop-node`) and QuickJS (`svgop-qjs-macos/svgop`, `build/svgop-qjs/svgop.js`). The `pkg` versions are generally recommended for standalone use.
-3.  **Make it executable (Linux/macOS):**
+2.  **Choose the right binary:** Download the appropriate executable for your operating system:
+    *   `svgop-pkg-linux.zip` for Linux (x64)
+    *   `svgop-pkg-macos.zip` for macOS (x64)
+    *   `svgop-qjs-macos.zip` for macOS (QuickJS version, smaller binary)
+    *   `svgop-pkg-win64.zip` for Windows (64-bit)
+3.  **Extract and install:**
     ```bash
-    chmod +x /path/to/your/downloaded/svgop
+    # Extract the archive
+    unzip svgop-pkg-linux.zip  # or appropriate file for your OS
+    
+    # Make it executable (Linux/macOS)
+    chmod +x svgop-pkg-linux/svgop
+    
+    # Move to your PATH (optional)
+    sudo mv svgop-pkg-linux/svgop /usr/local/bin/svgop
     ```
-4.  **Place it in your PATH (Optional):** For easier access, move the executable to a directory included in your system's PATH (e.g., `/usr/local/bin` on Linux/macOS).
+
+### Option 2: Build from Source
+
+If you want to build the latest version from source:
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/twardoch/svgop.git
+    cd svgop
+    ```
+
+2.  **Install prerequisites:**
+    ```bash
+    # Install Node.js dependencies
+    npm install -g pkg
+    
+    # Install system dependencies (Linux)
+    sudo apt-get install upx-ucl libxml2-utils
+    
+    # Install system dependencies (macOS)
+    brew install upx
+    ```
+
+3.  **Build:**
+    ```bash
+    ./build.sh
+    ```
+
+4.  **Binaries will be available in `bin/` directory**
 
 ## Usage
 
@@ -186,3 +223,71 @@ While there isn't a formal `CONTRIBUTING.md` file with explicit rules in this re
 *   **Plugin Configuration:** The SVGO plugin configuration is currently fixed. Changes to this would be a significant alteration and should be discussed.
 
 By following these guidelines, you can help maintain the quality and consistency of the SVGOp project.
+
+## Development and Release Process
+
+### For Developers
+
+This project uses **semantic versioning** with **git-tag-based releases**:
+
+1. **Development workflow:**
+   ```bash
+   # Make your changes
+   git add .
+   git commit -m "Your changes"
+   
+   # Build and test
+   ./build.sh
+   
+   # Run tests only
+   ./build.sh test
+   ```
+
+2. **Creating releases:**
+   ```bash
+   # Create a patch release (1.0.0 -> 1.0.1)
+   ./release.sh patch
+   
+   # Create a minor release (1.0.1 -> 1.1.0)
+   ./release.sh minor
+   
+   # Create a major release (1.1.0 -> 2.0.0)
+   ./release.sh major
+   ```
+
+3. **Automatic CI/CD:**
+   - Pull requests trigger automated testing
+   - Git tags trigger multiplatform binary builds
+   - Releases are automatically created with artifacts
+
+### Testing
+
+The project includes comprehensive tests:
+
+```bash
+# Run all tests
+./build.sh test
+
+# Run tests from source directory
+cd src && make test-all
+```
+
+### Build System
+
+The build system supports multiple targets:
+
+- **pkg**: Creates standalone Node.js executables
+- **QuickJS**: Creates smaller, faster native executables
+- **Platforms**: Linux, macOS, Windows
+
+Build artifacts:
+- `bin/` - Ready-to-use executables
+- `build/` - Intermediate build files
+- `dist/` - Distribution packages (ZIP files)
+
+### Version Management
+
+Versions are automatically managed based on git tags:
+- Tags must follow semantic versioning (e.g., `v1.2.3`)
+- The build system reads the latest tag and updates `package.json`
+- CI/CD creates releases when tags are pushed to the repository
