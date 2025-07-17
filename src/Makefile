@@ -3,7 +3,12 @@ all: qjs macos win64 linux
 
 prebuild: prebuild-clean prebuild-prep
 
-prebuild-prep:
+# Update version from git tags before building
+update-version:
+	@echo "Updating version from git tags..."
+	@node ../scripts/version.js
+
+prebuild-prep: update-version
 	@echo "Installing 'svgo' and its dependencies"
 	@npm i
 	@echo "Gathering 'svgo' sources"
@@ -140,3 +145,11 @@ test-qjs-macos:
 	@cat ../test/test.svg | ../build/svgop-qjs-macos/svgop
 
 test: test-node test-qjs test-macos-qjsc test-pkg-macos
+
+# Run comprehensive test suite
+test-all:
+	@echo "Running comprehensive test suite..."
+	@node ../test/test-runner.js
+
+# Build and test everything
+build-and-test: all test-all
