@@ -259,6 +259,7 @@ This project uses **semantic versioning** with **git-tag-based releases**:
    - Pull requests trigger automated testing
    - Git tags trigger multiplatform binary builds
    - Releases are automatically created with artifacts
+   - **Setup required:** See `GITHUB_ACTIONS_SETUP.md` for workflow installation
 
 ### Testing
 
