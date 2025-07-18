@@ -1,0 +1,192 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      release_id: ${{ steps.create_release.outputs.id }}
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Get version from tag
+      id: get_version
+      run: |
+        VERSION=${GITHUB_REF#refs/tags/v}
+        echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
+        echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+    
+    - name: Generate release notes
+      id: generate_notes
+      run: |
+        if [ -f "CHANGELOG.md" ]; then
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_OUTPUT
+          echo "## Changes" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo "See [CHANGELOG.md](CHANGELOG.md) for detailed changes." >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo "## Binary Downloads" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo "- **Linux**: svgop-pkg-linux.zip" >> $GITHUB_OUTPUT
+          echo "- **macOS**: svgop-pkg-macos.zip, svgop-qjs-macos.zip" >> $GITHUB_OUTPUT
+          echo "- **Windows**: svgop-pkg-win64.zip" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo "## Installation" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo "1. Download the appropriate binary for your platform" >> $GITHUB_OUTPUT
+          echo "2. Extract the archive" >> $GITHUB_OUTPUT
+          echo "3. Make the binary executable (Linux/macOS): \`chmod +x svgop\`" >> $GITHUB_OUTPUT
+          echo "4. Move to your PATH or run directly" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo "## Usage" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo "\`\`\`bash" >> $GITHUB_OUTPUT
+          echo "svgop < input.svg > output.svg" >> $GITHUB_OUTPUT
+          echo "\`\`\`" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+        else
+          echo "RELEASE_NOTES=Release ${{ steps.get_version.outputs.TAG }}" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.get_version.outputs.TAG }}
+        release_name: Release ${{ steps.get_version.outputs.TAG }}
+        body: ${{ steps.generate_notes.outputs.RELEASE_NOTES }}
+        draft: false
+        prerelease: false
+
+  build-and-upload:
+    runs-on: ${{ matrix.os }}
+    needs: create-release
+    
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux
+            targets: linux
+            asset_name: svgop-pkg-linux.zip
+            asset_path: dist/svgop-pkg-linux.zip
+          - os: macos-latest
+            platform: macos  
+            targets: macos
+            asset_name: svgop-pkg-macos.zip
+            asset_path: dist/svgop-pkg-macos.zip
+          - os: macos-latest
+            platform: macos-qjs
+            targets: macos
+            asset_name: svgop-qjs-macos.zip
+            asset_path: dist/svgop-qjs-macos.zip
+          - os: windows-latest
+            platform: windows
+            targets: win64
+            asset_name: svgop-pkg-win64.zip
+            asset_path: dist/svgop-pkg-win64.zip
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js 18
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        cache: 'npm'
+        cache-dependency-path: src/package-lock.json
+    
+    - name: Install dependencies
+      run: |
+        cd src
+        npm ci
+    
+    - name: Install global dependencies (Linux)
+      if: matrix.platform == 'linux'
+      run: |
+        npm install -g pkg
+        sudo apt-get update
+        sudo apt-get install -y upx-ucl libxml2-utils
+    
+    - name: Install global dependencies (macOS)
+      if: matrix.platform == 'macos' || matrix.platform == 'macos-qjs'
+      run: |
+        npm install -g pkg
+        brew install upx
+    
+    - name: Install global dependencies (Windows)
+      if: matrix.platform == 'windows'
+      run: |
+        npm install -g pkg
+        choco install upx
+    
+    - name: Get version from tag
+      id: get_version
+      run: |
+        VERSION=${GITHUB_REF#refs/tags/v}
+        echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
+    
+    - name: Update version in package.json
+      run: node scripts/version.js
+    
+    - name: Build for ${{ matrix.platform }}
+      run: |
+        cd src
+        make ${{ matrix.targets }}
+    
+    - name: Create checksums
+      run: |
+        cd dist
+        if [ -f "${{ matrix.asset_name }}" ]; then
+          sha256sum "${{ matrix.asset_name }}" > "${{ matrix.asset_name }}.sha256"
+        fi
+    
+    - name: Upload Release Asset
+      if: matrix.platform != 'macos-qjs'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: ${{ matrix.asset_path }}
+        asset_name: ${{ matrix.asset_name }}
+        asset_content_type: application/zip
+    
+    - name: Upload QJS Asset (macOS only)
+      if: matrix.platform == 'macos-qjs'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: ${{ matrix.asset_path }}
+        asset_name: ${{ matrix.asset_name }}
+        asset_content_type: application/zip
+    
+    - name: Upload Checksum
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: ${{ matrix.asset_path }}.sha256
+        asset_name: ${{ matrix.asset_name }}.sha256
+        asset_content_type: text/plain
+
+  notify-completion:
+    runs-on: ubuntu-latest
+    needs: [create-release, build-and-upload]
+    
+    steps:
+    - name: Notify completion
+      run: |
+        echo "Release completed successfully!"
+        echo "Release URL: https://github.com/${{ github.repository }}/releases/tag/${GITHUB_REF#refs/tags/}"
